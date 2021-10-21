@@ -1,5 +1,5 @@
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from enum import Enum
 
@@ -33,8 +33,11 @@ async def operate(operation: Operation, item: Item):
     if operation.value == 'multiply':
         return {"result": item.item_1 * item.item_2}
     if operation.value == 'divide':
+        if item.item_2 == 0:
+            raise HTTPException(
+                status_code=404, detail='Division by 0 not allowed!')
         return {"result": item.item_1 / item.item_2}
 
 
 if __name__ == '__main__':
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
