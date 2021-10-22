@@ -1,19 +1,5 @@
 import uvicorn
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-from enum import Enum
-
-
-class Item(BaseModel):
-    item_1: int
-    item_2: int
-
-
-class Operation(str, Enum):
-    add = 'add'
-    subtract = 'subtract'
-    multiply = 'multiply'
-    divide = 'divide'
 
 
 app = FastAPI()
@@ -24,19 +10,27 @@ async def root():
     return {"message": "Welcome to basic math operations api !"}
 
 
-@app.post("/{operation}", tags=['Basic math operations'])
-async def operate(operation: Operation, item: Item):
-    if operation.value == 'add':
-        return {"result": item.item_1 + item.item_2}
-    if operation.value == 'subtract':
-        return {"result": item.item_1 - item.item_2}
-    if operation.value == 'multiply':
-        return {"result": item.item_1 * item.item_2}
-    if operation.value == 'divide':
-        if item.item_2 == 0:
-            raise HTTPException(
-                status_code=404, detail='Division by 0 not allowed!')
-        return {"result": item.item_1 / item.item_2}
+@app.get("/add")
+async def add(a: int, b: int):
+    return {"result": a + b}
+
+
+@app.get("/subtract")
+async def subtract(a: int, b: int):
+    return {"result": a - b}
+
+
+@app.get("/multiply")
+async def multiply(a: int, b: int):
+    return {"result": a * b}
+
+
+@app.get("/divide")
+async def divide(a: int, b: int):
+    if b == 0:
+        raise HTTPException(
+            status_code=404, detail='Division by 0 not allowed!')
+    return {"result": a / b}
 
 
 if __name__ == '__main__':
