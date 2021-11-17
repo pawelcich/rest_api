@@ -7,7 +7,7 @@ app = FastAPI()
 
 @app.get("/")
 async def root():
-    return {"message": "Welcome to basic math operations api !"}
+    return {"message": "Welcome to basic math operations api!"}
 
 
 @app.get("/add")
@@ -34,4 +34,4 @@ async def divide(a: int, b: int):
 
 
 if __name__ == '__main__':
-    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("app:app", host="0.0.0.0", port=5000, reload=True)
